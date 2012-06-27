@@ -802,109 +802,14 @@ public class LoggerEditor extends ListActivity {
 	}
 	
 	private void setSelectedLoggerLevel(Level next) {
+		if(selectedLogger == null) {
+			Toast.makeText(this, "Please select a logger.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		selectedLogger.setLevel(next);
 		updateIcon(next, selectedView);
 	}
 	
-	
-	
-	// TODO: Remove this old ui code from spinner based level selection
-	
-//	/**
-//	 * the spinner makes use of this listener.
-//	 */
-//	public class MyOnSpinnerDialogClickListener implements
-//			OnSpinnerDialogClickListener {
-//
-//		final LoggerEditor parent = LoggerEditor.this;
-//
-//		/**
-//		 * Sets the current text on the Spinner to match the given Level
-//		 * 
-//		 * @param lvl
-//		 */
-//		public void updateSpinner(final Level lvl, final Spinner spinner) {
-//
-//			switch (lvl.levelInt) {
-//			case Level.TRACE_INT:
-//				spinner.setSelection(TRACE_IX);
-//				break;
-//			case Level.DEBUG_INT:
-//				spinner.setSelection(DEBUG_IX);
-//				break;
-//			case Level.INFO_INT:
-//				spinner.setSelection(INFO_IX);
-//				break;
-//			case Level.WARN_INT:
-//				spinner.setSelection(WARN_IX);
-//				break;
-//			case Level.ERROR_INT:
-//				spinner.setSelection(ERROR_IX);
-//				break;
-//			case Level.OFF_INT:
-//			default:
-//				spinner.setSelection(OFF_IX);
-//			}
-//		}
-//
-//		/**
-//		 * Updates the logger and the icon in its row based on the selected
-//		 * level.
-//		 */
-//		public void onSpinnerDialogClick(int which) {
-//
-//			if (parent.selectedLogger == null) {
-//				Toast.makeText(parent, "Please select a logger.",
-//						Toast.LENGTH_SHORT).show();
-//				return;
-//			}
-//
-//			if (parent.selectedView == null)
-//				return;
-//
-//			final Level nextLevel;
-//
-//			switch (which) {
-//			case TRACE_IX:
-//				nextLevel = Level.TRACE;
-//				break;
-//			case DEBUG_IX:
-//				nextLevel = Level.DEBUG;
-//				break;
-//			case INFO_IX:
-//				nextLevel = Level.INFO;
-//				break;
-//			case WARN_IX:
-//				nextLevel = Level.WARN;
-//				break;
-//			case ERROR_IX:
-//				nextLevel = Level.ERROR;
-//				break;
-//			case OFF_IX:
-//				nextLevel = Level.OFF;
-//				break;
-//			case CLEAR_IX:
-//			default:
-//				if (selectedLogger.equals(Loggers.ROOT_LOGGER)) {
-//					Toast.makeText(parent,
-//							"Clearing the root logger is not allowed",
-//							Toast.LENGTH_LONG).show();
-//					return;
-//				}
-//				nextLevel = null;
-//			}
-//
-//			parent.selectedLogger.setLevel(nextLevel);
-//
-//			// We want to use the effective level for the icon if the
-//			// Logger's level is null
-//			updateIcon(
-//					(nextLevel == null) ? parent.selectedLogger.getEffectiveLevel()
-//							: nextLevel, parent.selectedView);
-//
-//		}
-//
-//	}
 
 	/*
 	 * The following code comes from
