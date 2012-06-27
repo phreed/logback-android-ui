@@ -28,8 +28,10 @@ public class ContextSelector extends ListActivity {
 		
 		setListAdapter(adapter);
 		
-		LoggerFactory.getLogger("a");
-		LoggerFactory.getLogger("b");
+		// This is debug code to simulate a full list view of loggers
+		for(int i=0; i<100; i++) {
+			LoggerFactory.getLogger("Logger"+i);
+		}
 		
 	}
 	
