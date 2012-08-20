@@ -1,3 +1,13 @@
+/*Copyright (C) 2010-2012 Institute for Software Integrated Systems (ISIS)
+This software was developed by the Institute for Software Integrated
+Systems (ISIS) at Vanderbilt University, Tennessee, USA for the 
+Transformative Apps program under DARPA, Contract # HR011-10-C-0175.
+The United States Government has unlimited rights to this software. 
+The US government has the right to use, modify, reproduce, release, 
+perform, display, or disclose computer software or computer software 
+documentation in whole or in part, in any manner and for any 
+purpose whatsoever, and to have or authorize others to do so.
+ */
 package edu.vu.isis.logger.ui;
 
 import java.util.ArrayList;
@@ -18,6 +28,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import edu.vu.isis.logger.R;
 
+/**
+ * Allows the user to select which application's LoggerContext to view and edit.
+ * Android is queried for applications running LAUI by finding all applications
+ * with Content Providers whose authorities end with "LauiContentProvider"
+ * @author Nick King
+ * 
+ */
 public class ContextSelector extends ListActivity {
 
 	private List<AppHolder> mAppList = new ArrayList<AppHolder>();
@@ -65,7 +82,7 @@ public class ContextSelector extends ListActivity {
 		intent.setClass(this, LogcatLogViewer.class);
 		startActivity(intent);
 	}
-	
+
 	public void refreshList(View v) {
 		findContentProviders();
 	}

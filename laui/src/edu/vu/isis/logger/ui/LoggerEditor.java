@@ -1,3 +1,13 @@
+/*Copyright (C) 2010-2012 Institute for Software Integrated Systems (ISIS)
+This software was developed by the Institute for Software Integrated
+Systems (ISIS) at Vanderbilt University, Tennessee, USA for the 
+Transformative Apps program under DARPA, Contract # HR011-10-C-0175.
+The United States Government has unlimited rights to this software. 
+The US government has the right to use, modify, reproduce, release, 
+perform, display, or disclose computer software or computer software 
+documentation in whole or in part, in any manner and for any 
+purpose whatsoever, and to have or authorize others to do so.
+*/
 package edu.vu.isis.logger.ui;
 
 import java.io.File;
@@ -67,7 +77,19 @@ import edu.vu.isis.logger.util.TreeAdapter;
 
 /**
  * This class provides a user interface to edit the Level and Appenders of all
- * Logger objects provided by the ContentProvider.
+ * Logger objects provided by the ContentProvider. The ContentProvider is
+ * queried for all of the Loggers and Appenders once when the Activity is
+ * started. The user can also force another query from a menu selection. Loggers
+ * and Appenders are stored inside of LoggerHolder and AppenderHolder objects.
+ * These allow us to keep track of the levels of the Loggers and Appenders
+ * without querying the ContentProvider excessively. The UI only reflects what
+ * we have stored in our AppenderHolder and LoggerHolder objects, so it is
+ * important to note that if something happens that causes the level of a Logger
+ * to change in the other application, then we will not know and our UI will
+ * show invalid data.
+ * 
+ * This class also has the capability of saving and loading Logger
+ * configurations. This is achieved by reading and writing XML files.
  * 
  * @author Nick King
  * 
@@ -96,7 +118,7 @@ public class LoggerEditor extends ListActivity {
 			.getLoggerByName("ui.logger.editor");
 
 	private TextView selectionText;
-	private NoDefaultSpinner levelSpinner;
+	private HintSpinner levelSpinner;
 	private MyOnSpinnerDialogClickListener spinnerListener;
 	private ListView mListView;
 	private LoggerIconAdapter mAdapter;
@@ -126,7 +148,7 @@ public class LoggerEditor extends ListActivity {
 		getDataAndSetUpList();
 
 		this.selectionText = (TextView) findViewById(R.id.selection_text);
-		this.levelSpinner = (NoDefaultSpinner) findViewById(R.id.level_spinner);
+		this.levelSpinner = (HintSpinner) findViewById(R.id.level_spinner);
 
 		final ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter
 				.createFromResource(this, R.array.level_options,
@@ -134,6 +156,7 @@ public class LoggerEditor extends ListActivity {
 		spinAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+		this.levelSpinner.setAlwaysShowHint(true);
 		this.levelSpinner.setAdapter(spinAdapter);
 		this.spinnerListener = new MyOnSpinnerDialogClickListener();
 		this.levelSpinner.setOnItemSelectedListener(this.spinnerListener);
@@ -381,8 +404,8 @@ public class LoggerEditor extends ListActivity {
 		final LoggerHolder nextSelectedLogger = (LoggerHolder) parent
 				.getItemAtPosition(position);
 
+		levelSpinner.clearSelection();
 		updateSelText(nextSelectedLogger.name);
-		levelSpinner.setHintSelected();
 
 		this.selectedLogger = nextSelectedLogger;
 		this.selectedView = row;
@@ -657,7 +680,8 @@ public class LoggerEditor extends ListActivity {
 				appenderSet.add(appender);
 			}
 
-			logger.levelInt = levelStr.equals("null") ? LauiContentProvider.NO_LEVEL : Level.valueOf(levelStr).toInteger();
+			logger.levelInt = levelStr.equals("null") ? LauiContentProvider.NO_LEVEL
+					: Level.valueOf(levelStr).toInteger();
 			logger.additivity = Boolean.valueOf(additivityStr);
 			logger.appenders = appenderSet;
 		}
@@ -672,9 +696,13 @@ public class LoggerEditor extends ListActivity {
 			for (LoggerHolder logger : loggerMap.values()) {
 				serializer.startTag("", "logger");
 				serializer.attribute("", NAME_ATT, logger.name);
-				serializer.attribute("", LEVEL_ATT,
-						(logger.levelInt != LauiContentProvider.NO_LEVEL) ? Level
-								.toLevel(logger.levelInt).toString() : "null");
+				serializer
+						.attribute(
+								"",
+								LEVEL_ATT,
+								(logger.levelInt != LauiContentProvider.NO_LEVEL) ? Level
+										.toLevel(logger.levelInt).toString()
+										: "null");
 				serializer.attribute("", APPENDER_ATT,
 						makeAppenderStr(logger.appenders));
 				serializer.attribute("", ADDITIVITY_ATT,
@@ -767,46 +795,46 @@ public class LoggerEditor extends ListActivity {
 	private void setEffectiveIcon(Level lvl, ImageView iv) {
 		switch (lvl.levelInt) {
 		case Level.TRACE_INT:
-			iv.setImageResource(R.drawable.effective_trace_level_icon);
+			iv.setImageResource(R.drawable.ic_effective_logger_trace);
 			break;
 		case Level.DEBUG_INT:
-			iv.setImageResource(R.drawable.effective_debug_level_icon);
+			iv.setImageResource(R.drawable.ic_effective_logger_debug);
 			break;
 		case Level.INFO_INT:
-			iv.setImageResource(R.drawable.effective_info_level_icon);
+			iv.setImageResource(R.drawable.ic_effective_logger_info);
 			break;
 		case Level.WARN_INT:
-			iv.setImageResource(R.drawable.effective_warn_level_icon);
+			iv.setImageResource(R.drawable.ic_effective_logger_warn);
 			break;
 		case Level.ERROR_INT:
-			iv.setImageResource(R.drawable.effective_error_level_icon);
+			iv.setImageResource(R.drawable.ic_effective_logger_error);
 			break;
 		case Level.OFF_INT:
 		default:
-			iv.setImageResource(R.drawable.effective_off_level_icon);
+			iv.setImageResource(R.drawable.ic_effective_logger_off);
 		}
 	}
 
 	private void setActualIcon(Level lvl, ImageView iv) {
 		switch (lvl.levelInt) {
 		case Level.TRACE_INT:
-			iv.setImageResource(R.drawable.actual_trace_level_icon);
+			iv.setImageResource(R.drawable.ic_actual_logger_trace);
 			break;
 		case Level.DEBUG_INT:
-			iv.setImageResource(R.drawable.actual_debug_level_icon);
+			iv.setImageResource(R.drawable.ic_actual_logger_debug);
 			break;
 		case Level.INFO_INT:
-			iv.setImageResource(R.drawable.actual_info_level_icon);
+			iv.setImageResource(R.drawable.ic_actual_logger_info);
 			break;
 		case Level.WARN_INT:
-			iv.setImageResource(R.drawable.actual_warn_level_icon);
+			iv.setImageResource(R.drawable.ic_actual_logger_warn);
 			break;
 		case Level.ERROR_INT:
-			iv.setImageResource(R.drawable.actual_error_level_icon);
+			iv.setImageResource(R.drawable.ic_actual_logger_error);
 			break;
 		case Level.OFF_INT:
 		default:
-			iv.setImageResource(R.drawable.actual_off_level_icon);
+			iv.setImageResource(R.drawable.ic_actual_logger_off);
 		}
 	}
 
@@ -882,10 +910,10 @@ public class LoggerEditor extends ListActivity {
 
 			if (logger == rootLogger) {
 				holder.appenderIV
-						.setImageResource(R.drawable.appender_attached_icon);
+						.setImageResource(R.drawable.ic_appender_attached);
 			} else if (!logger.isAdditive()) {
 				holder.appenderIV
-						.setImageResource(R.drawable.appender_attached_icon);
+						.setImageResource(R.drawable.ic_appender_attached);
 			} else {
 				holder.appenderIV.setImageBitmap(null);
 			}
@@ -949,7 +977,7 @@ public class LoggerEditor extends ListActivity {
 		TextView tv = (TextView) dialog
 				.findViewById(R.id.appender_selector_message);
 		String message = "Configuring appenders for logger "
-				+ selectedLogger.name + "  Close dialog to save changes.";
+				+ selectedLogger.name + "\nClose dialog to save changes.";
 		tv.setText(message);
 
 		final LoggerHolder parentLogger = loggerMap.get(Loggers
@@ -1179,8 +1207,8 @@ public class LoggerEditor extends ListActivity {
 					+ name
 					+ "\""
 					+ " Level: "
-					+ ((levelInt == LauiContentProvider.NO_LEVEL) ? "none" : Level
-							.toLevel(levelInt, Level.ALL));
+					+ ((levelInt == LauiContentProvider.NO_LEVEL) ? "none"
+							: Level.toLevel(levelInt, Level.ALL));
 		}
 
 	}

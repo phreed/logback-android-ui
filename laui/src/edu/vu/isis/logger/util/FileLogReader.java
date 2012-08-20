@@ -1,3 +1,13 @@
+/*Copyright (C) 2010-2012 Institute for Software Integrated Systems (ISIS)
+This software was developed by the Institute for Software Integrated
+Systems (ISIS) at Vanderbilt University, Tennessee, USA for the 
+Transformative Apps program under DARPA, Contract # HR011-10-C-0175.
+The United States Government has unlimited rights to this software. 
+The US government has the right to use, modify, reproduce, release, 
+perform, display, or disclose computer software or computer software 
+documentation in whole or in part, in any manner and for any 
+purpose whatsoever, and to have or authorize others to do so.
+ */
 package edu.vu.isis.logger.util;
 
 import java.io.File;
@@ -17,14 +27,14 @@ import android.os.Handler;
  * capability to read both backwards and forwards through a file. However, it
  * may also be used to read straight through a file in only one direction if
  * desired.
- * <p>
+ * <p/>
  * If this log reader will be used to read from a file only once and only in one
  * direction, then no care has to be taken about the handling of the data
  * previously read. However, if this log reader will be used to read back and
  * forth in a file, then it is important to ensure that the following
  * information is kept in mind.
- * <p>
- * When constructing a FileLogReader, one much specify a parameter known as the
+ * <p/>
+ * When constructing a FileLogReader, one must specify a parameter known as the
  * spread limit. This is the maximum number of lines that can be between this
  * log reader's top and bottom line markers in the file. When this limit is
  * reached, the FileLogReader shifts both of its line markers forward or
@@ -37,7 +47,7 @@ import android.os.Handler;
  * topmost line that was just bumped off screen comes back on screen and the
  * newest, bottommost line is pushed off screen again. This is the model that
  * was in mind for this class to facilitate.
- * <p>
+ * <p/>
  * This log reader does not cache previously read data to accomplish this
  * behavior. It only keeps track of the position of the top and bottom lines
  * within its spread limit. It is the responsibility of the client class to
@@ -55,8 +65,7 @@ public class FileLogReader extends LogReader {
 	public static final LogElement END_OF_FILE = new LogElement(LogLevel.None,
 			ByteBuffers.END_OF_TEXT_STR);
 
-	@SuppressWarnings("unused")
-	private final MyFileObserver mObserver;
+	// private final MyFileObserver mObserver;
 	private final File mFile;
 	private final ScrollingFileReader mReader;
 
@@ -99,8 +108,8 @@ public class FileLogReader extends LogReader {
 		mFile = file;
 		mContext = context;
 		mHandler = handler;
-		mObserver = new MyFileObserver(file.getAbsolutePath(),
-				FileObserver.MODIFY);
+		// mObserver = new MyFileObserver(file.getAbsolutePath(),
+		// FileObserver.MODIFY);
 	}
 
 	/*
@@ -248,11 +257,14 @@ public class FileLogReader extends LogReader {
 	}
 
 	/**
-	 * Private inner class to notify us of file events
+	 * Private inner class to notify us of file events. The plan is to
+	 * automatically do whatever is necessary to allow the user to see the new
+	 * lines in the file when they are added, but this functionality is not yet
+	 * implemented.
 	 */
+	@SuppressWarnings("unused")
 	private class MyFileObserver extends FileObserver {
 
-		@SuppressWarnings("unused")
 		private FileLogReader parent = FileLogReader.this;
 
 		public MyFileObserver(String path) {

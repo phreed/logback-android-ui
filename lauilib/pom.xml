@@ -7,6 +7,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <properties>
     <laui.type>schema</laui.type>
   </properties>
+
   <parent>
     <groupId>edu.vu.isis</groupId>
     <artifactId>laui-parent</artifactId>
@@ -16,12 +17,43 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <artifactId>lauilib</artifactId>
   <packaging>jar</packaging>
   <name>lauilib</name>
+  <description>
+	A library to allow Android applications to be used by LAUI (Logback Android
+	UI).  Applications will need this library so that LAUI can read and edit
+	their Logback loggers.
+  </description>
+
+  <url>http://nking92.github.com/logback-android-ui/</url>
+
+  <licenses>
+    <license>
+      <name>Vanderbilt-ISIS</name>
+      <url>http://nking92.github.com/logback-android-ui/vandy-isis-license.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/Nking92/logback-android-ui</url>
+  </scm>
 
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.tony19</groupId>
+      <artifactId>logback-android-classic</artifactId>
+      <version>1.0.6-2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.tony19</groupId>
+      <artifactId>logback-android-core</artifactId>
+      <version>1.0.6-2</version>
     </dependency>
 
     <dependency>
@@ -33,6 +65,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   </dependencies>
 
   <build>
+    <sourceDirectory>src</sourceDirectory>
     <finalName>${project.artifactId}</finalName>
     <resources>
       <resource>

@@ -1,3 +1,13 @@
+/*Copyright (C) 2010-2012 Institute for Software Integrated Systems (ISIS)
+This software was developed by the Institute for Software Integrated
+Systems (ISIS) at Vanderbilt University, Tennessee, USA for the 
+Transformative Apps program under DARPA, Contract # HR011-10-C-0175.
+The United States Government has unlimited rights to this software. 
+The US government has the right to use, modify, reproduce, release, 
+perform, display, or disclose computer software or computer software 
+documentation in whole or in part, in any manner and for any 
+purpose whatsoever, and to have or authorize others to do so.
+*/
 package edu.vu.isis.logger.ui;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -197,7 +207,7 @@ public class LogViewerBase extends ListActivity {
 	/**
 	 * Unpauses the log reader, causing it to resume its reading
 	 */
-	protected void play() {
+	void play() {
 		this.isPaused.set(false);
 		if (mLogReader != null) {
 			this.mLogReader.resume();
@@ -207,7 +217,7 @@ public class LogViewerBase extends ListActivity {
 	/**
 	 * Pauses the log reader, causing it to stop reading temporarily.
 	 */
-	protected void pause() {
+	void pause() {
 		this.isPaused.set(true);
 		if (mLogReader != null) {
 			this.mLogReader.pause();
@@ -217,14 +227,14 @@ public class LogViewerBase extends ListActivity {
 	/**
 	 * Sets the listview's scroll to the top of the list
 	 */
-	protected void setScrollToTop() {
+	void setScrollToTop() {
 		this.mListView.setSelection(0);
 	}
 
 	/**
 	 * Sets the listview's scroll to the bottom of the list
 	 */
-	protected void setScrollToBottom() {
+	void setScrollToBottom() {
 		this.mListView.setSelection(this.mAdapter.getCount() - 1);
 	}
 
